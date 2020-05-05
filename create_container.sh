@@ -7,8 +7,8 @@
 #   an X server
 
 
-DOCKER_IMG_NAME=coral_tpu_detector_docker:latest
-CONTAINER_NAME=tynguyen_coral_tpu_detector_docker
+DOCKER_IMG_NAME=$DOCKER_IMG_NAME
+CONTAINER_NAME=$CONTAINER_NAME
 DOCKER_USER=$(whoami)
 
 # Port mapping 
@@ -25,7 +25,8 @@ else
 	echo "Given docker image: $DOCKER_IMG_NAME"
 fi
 
-IMG=$(basename $DOCKER_IMG_NAME)
+#IMG=$(basename $DOCKER_IMG_NAME)
+IMG=$DOCKER_IMG_NAME
 
 ARGS=("$@")
 WORKSPACES=("${ARGS[@]:1}")
@@ -86,7 +87,8 @@ echo "Docker options: $DOCKER_OPTS"
 # E.g.:
 # -v "/opt/sublime_text:/opt/sublime_text" \
 
-docker run -it \
+#--rm will remove the container after exitting
+nvidia-docker run -it \
   --name=$CONTAINER_NAME \
   -p $PORT_OPTS \
   -e DISPLAY \
@@ -97,7 +99,6 @@ docker run -it \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/dev/input:/dev/input" \
   --privileged \
-  --rm \
   --runtime=nvidia \
   --security-opt seccomp=unconfined \
   $DOCKER_OPTS \

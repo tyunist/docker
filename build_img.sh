@@ -5,7 +5,6 @@ Usage: bash build_img.sh <folder_to_the_Docker_file>
 The created docker image will have the name + tag: folder_to_the_Docker_file:latest
 ```
 # Builds a Docker image.
-
 # Define user name for the docker container
 # This may not work if an user belongs to multiple groups. If it is the case, manually input
 user_name=$(whoami)
@@ -15,9 +14,10 @@ g_id=$user_id
 
 if [ $# -eq 0 ]
 then
-    echo "Usage: $0 directory-name"
+    echo "Usage: $0 directory-name tag-name" 
     exit 1
 fi
+
 
 # get path to current directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -31,6 +31,17 @@ fi
 
 image_name=$(basename $1)
 
+if [ -n "$2" ]
+then 
+  echo "Given a tagname: $2"
+  tag_name=$2
+else
+  echo "Not given a tagname!"
+  echo "By default, tagname: latest"
+  tag_name="latest"
+fi 
+
+
 
 echo "Dir: $DIR"
 echo "Image name: $image_name"
@@ -38,7 +49,7 @@ echo "group id: $g_id"
 echo "user_id: $user_id"
 
 #image_plus_tag=$image_name:$(date +%Y_%b_%d_%H%M)
-image_plus_tag=$image_name:latest
+image_plus_tag=$image_name:$tag_name
 
 docker build --rm=true -t $image_plus_tag --build-arg user_id=$user_id \
 	     --build-arg user_name=$user_name	\
@@ -46,4 +57,4 @@ docker build --rm=true -t $image_plus_tag --build-arg user_id=$user_id \
 	     $DIR/$image_name 
 #docker tag $image_plus_tag $image_name:latest
 
-echo "Built $image_plus_tag and tagged as $image_name:latest"
+echo "Built $image_plus_tag and tagged as $image_name:$tag_name"
