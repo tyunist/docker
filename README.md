@@ -1,18 +1,23 @@
-# docker
-My repo for managing dockers
+# Docker
+My repo for docker management
+tynguyen@seas.upenn.edu 
 
 # Structure 
 ## Base image: tynguyen_base_ubuntu1804_cuda10.0_docker:latest 
+Based on nvidia/cuda:10.0-devel-ubuntu18.04
+- [x] ubuntu18.04
 - [x] cuda10.0
 - [x] nvidia 440
 - [x] python3.7
 - [x] Opencv3 python3.7 via pip :-( 
 
-## Coral_tpu image
-From tynguyen_base_ubuntu1804_cuda10.0_docker:latest 
-
-- [] cocoapi 
+## Dev images
+### Coral_tpu image
+Based on tynguyen_base_ubuntu1804_cuda10.0_docker:latest 
+- [ ] cocoapi 
 - [x] proto3 
+- [x] vim 
+- [x] .tmux.conf 
 
 Install cocoAPI as follows 
 ```
@@ -27,13 +32,23 @@ cp -r pycocotools /tensorflow/models/research && \
     rm -rf cocoapi
 ```
 
+### Pytorch tensorflow ROS image
+Based on tynguyen_base_ubuntu1804_cuda10.0_docker:latest 
+- [ ] cocoapi 
+- [ ] proto3 
+- [ ] vim 
+- [ ] .tmux.conf 
+- [ ] pytorch python3.7
+- [ ] tensorflow2.0 python3.7
+- [ ] ROS Melodic python3.7
+
 ### tynguyen_caffe_pytorch_tf_base_docker
 From caffe2ai/caffe2:c2v0.8.1.cuda8.cudnn7.ubuntu16.04 
-- [] python3.7
-- [x] python2.7, caffe
-- []
+- [ ] python3.7
+- [x] Caffe python2.7
+- [ ] pytorch cuda8.0 python2.7
 
-To install pytorch cuda8.0
+To manually install pytorch cuda8.0
 ```
 Install miniconda within the container
 ```
@@ -74,7 +89,7 @@ chmod +x install_python3.7.sh
 
 
 # Create a container 
-## Choose the docker image and the name of the container by setting in 
+## Set the docker image and the name of the container as follows, i.e. 
 ```
 DOCKER_IMG_NAME="tynguyen_base_ubuntu1804_cuda10.0_docker:latest"
 CONTAINER_NAME="tynguyen_base"
@@ -106,6 +121,11 @@ Name of the image and container should be already set in constants_for_create_co
 bash create_container.sh
 ```
 
-
-
-## 
+# Use a container
+Once a container is created, the following scripts are used to easily manage the container.
+```
+run_container.sh: start the container (different from creating the container). This is used in case the  container is already there (check by $docker container ls -a)
+stop_container.sh: stop the container 
+rm_container.sh : remove the container
+```
+These scripts refer to $CONTAINER_NAME set in constants_for_create_container.sh 
