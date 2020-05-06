@@ -6,13 +6,14 @@
 #   nvidia-docker
 #   an X server
 
+# Import image name and container name from 
+source constants_for_create_container.sh
 
-DOCKER_IMG_NAME=$DOCKER_IMG_NAME
-CONTAINER_NAME=$CONTAINER_NAME
+
 DOCKER_USER=$(whoami)
 
 # Port mapping 
-PORT_OPTS=0.0.0.0:7007:7007
+PORT_OPTS=0.0.0.0:7008:7008
 
 
 if [ $# -lt 1 ]

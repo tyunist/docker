@@ -23,10 +23,12 @@ ADD install_timezone.sh /install_timezone.sh
 RUN /install_timezone.sh
 #RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 
-# Install opencv3
-
 
 # Install wget (to make life easier below) and editors (to allow people to edit
 # the files inside the container)
 RUN apt-get update && \
     apt-get install -y wget vim emacs nano tmux
+
+# Install opencv3
+ADD install_opencv3_from_pip.sh /install_opencv3_from_pip.sh
+RUN /install_opencv3_from_pip.sh
