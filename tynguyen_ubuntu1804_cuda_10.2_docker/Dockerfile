@@ -11,6 +11,24 @@ FROM ${base_docker_img_name}:${base_docker_img_tag}
 #FROM nvidia/cuda:10.2-devel-ubuntu18.04
 
 
+RUN apt-get update
+
+# Add username and add to sudoers group to install tensorflow ...
+ARG user_name=tynguyen
+ARG user_id=1000
+ARG g_id=1000
+## Replace 1012 with your user / group id of the machine on which docker is installed
+# To find this, use: $id -u  and $id -g 
+RUN apt-get install sudo
+RUN export uid=$user_id gid=$g_id && \
+    mkdir -p /home/$user_name && \
+    echo "$user_name:x:${uid}:${gid}:$user_name,,,:/home/$user_name:/bin/bash" >> /etc/passwd && \
+    echo "$user_name:x:${uid}:" >> /etc/group && \
+    echo "$user_name ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$user_name && \
+    chmod 0440 /etc/sudoers.d/$user_name && \
+    chown ${uid}:${gid} -R /home/$user_name
+
+
 
 
 # Install cudnn
@@ -61,3 +79,10 @@ RUN apt-get update && \
 # Install opencv3
 ADD install_opencv3_from_pip.sh /install_opencv3_from_pip.sh
 RUN /install_opencv3_from_pip.sh
+
+
+USER $user_name
+ENV HOME /home/$user_name
+WORKDIR $HOME
+
+

@@ -24,15 +24,16 @@ PORT_OPTS=0.0.0.0:7008:7008
 if [ $# -lt 1 ]
 then
     echo "Usage: $0 <docker image> [<dir with workspace> ...]"
-	echo "By default, use $DOCKER_IMG_NAME"
+	echo "By default, use $DOCKER_IMG_NAME:$DOCKER_IMG_TAG"
     #exit 1
 else
 	$DOCKER_IMG_NAME=$1
-	echo "Given docker image: $DOCKER_IMG_NAME"
+	$DOCKER_IMG_TAG=$2
+	echo "Given docker image: $DOCKER_IMG_NAME:$DOCKER_IMG_TAG"
 fi
 
 #IMG=$(basename $DOCKER_IMG_NAME)
-IMG=$DOCKER_IMG_NAME
+IMG=$DOCKER_IMG_NAME:$DOCKER_IMG_TAG
 
 ARGS=("$@")
 WORKSPACES=("${ARGS[@]:1}")
@@ -51,8 +52,6 @@ then
     fi
     chmod a+r $XAUTH
 fi
-
-DOCKER_OPTS=
 
 # Share your vim settings.
 VIMRC=$HOME/.vim
@@ -105,7 +104,6 @@ docker run -it \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/dev/input:/dev/input" \
   --privileged \
-  --runtime=nvidia \
   --security-opt seccomp=unconfined \
   $DOCKER_OPTS \
   $IMG	\
