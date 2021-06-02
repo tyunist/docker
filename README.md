@@ -2,11 +2,14 @@
 My repo for docker management
 tynguyen@seas.upenn.edu 
 
+# Updates
+- [ ] [updated June 1st 2021] more flexible on cudnn version and cuda version. New build_img.sh script enables to select cuda version as well as cudnn version. 
+
 # Structure 
-## Base image: tynguyen_base_ubuntu1804_cuda10.0_docker:latest 
-Based on nvidia/cuda:10.0-devel-ubuntu18.04
+## Base image: tynguyen_ubuntu1804_cuda12.0_docker:latest 
+Based on nvidia/cuda:10.2-devel-ubuntu18.04
 - [x] ubuntu18.04
-- [x] cuda10.0
+- [x] cuda10.2
 - [x] nvidia 440
 - [x] python3.7
 - [x] Opencv3 python3.7 via pip :-( 
@@ -57,15 +60,12 @@ conda install pytorch==1.0.0 torchvision==0.2.1 cuda80 -c pytorch
 ```
 
 ## Create a new image from a base image
-Create a folder whose name is the name of the image to create 
-i.e. DOCKER_IMG_NAME=coral_tpu_detector_docker, then 
+Create a folder that contains our Dockefile
+i.e. DOCKER_FILE_FOLDER=dockerfile_path, then 
 ```
-cd $DOCKER_IMG_NAME
+source my_docker_env.sh
+cd $DOCKER_FILE_PATH
 touch Dockerfile
-```
-Include the following line to the Dockerfile
-```
-FROM <name + tag of the base image>
 ```
 To make it easier to manage which packages installed in the image, for each package supposed to be intalled in the image, one should create a script
 i.e
@@ -94,7 +94,7 @@ chmod +x install_python3.7.sh
 DOCKER_IMG_NAME="tynguyen_base_ubuntu1804_cuda10.0_docker:latest"
 CONTAINER_NAME="tynguyen_base"
 ```
-in constants_for_create_container.sh 
+in my_docker_env.sh 
 
 ## Before buidling the image, make sure the base image is already there 
 if not, 

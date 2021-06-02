@@ -7,8 +7,13 @@
 #   an X server
 
 # Import image name and container name from 
-source constants_for_create_container.sh
-
+if [ -n "${DOCKER_IMG_NAME}" ]
+then 
+  echo "Create a docker container '${CONTAINER_NAME}' given by CONTAINER_NAME!"  
+else 
+  echo "Sourcing my_docker_env.sh to activate '${CONTAINER_NAME}' which is empty now"  
+  source my_docker_evn.sh
+fi
 
 DOCKER_USER=$(whoami)
 
@@ -63,8 +68,8 @@ fi
 
 
 # Share the github workspace 
-GITHUB_WS=$HOME/github_workspaces
-DOCKER_OPTS="$DOCKER_OPTS -v $GITHUB_WS:/home/$DOCKER_USER/github_workspaces:rw"
+GITHUB_WS=$HOME/github_ws
+DOCKER_OPTS="$DOCKER_OPTS -v $GITHUB_WS:/home/$DOCKER_USER/github_ws:rw"
 
 echo "Docker options: $DOCKER_OPTS"
 
@@ -89,7 +94,7 @@ echo "Docker options: $DOCKER_OPTS"
 # -v "/opt/sublime_text:/opt/sublime_text" \
 
 #--rm will remove the container after exitting
-nvidia-docker run -it \
+docker run -it \
   --name=$CONTAINER_NAME \
   -p $PORT_OPTS \
   -e DISPLAY \
