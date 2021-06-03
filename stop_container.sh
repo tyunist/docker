@@ -1,4 +1,4 @@
 # Import image name and container name from 
-source constants_for_create_container.sh
+source my_docker_env.sh
 
 docker stop $CONTAINER_NAME 

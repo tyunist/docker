@@ -1,3 +1,4 @@
 # Import image name and container name from 
-source constants_for_create_container.sh
+source my_docker_env.sh
+docker start $CONTAINER_NAME 
 docker exec -it $CONTAINER_NAME bash

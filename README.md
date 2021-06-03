@@ -4,6 +4,7 @@ tynguyen@seas.upenn.edu
 
 # Updates
 - [ ] [updated June 1st 2021] more flexible on cudnn version and cuda version. New build_img.sh script enables to select cuda version as well as cudnn version. 
+- [ ] [updated June 2st 2021] move away .bashrc, .tmux.conf, my_docker_env.sh from the host machine by giving them directly 
 
 # Structure 
 ## Base image: tynguyen_ubuntu1804_cuda12.0_docker:latest 
@@ -89,37 +90,37 @@ chmod +x install_python3.7.sh
 
 
 # Create a container 
-## Set the docker image and the name of the container as follows, i.e. 
+## Set the docker image and the name of the container by modifying: 
 ```
 DOCKER_IMG_NAME="tynguyen_base_ubuntu1804_cuda10.0_docker:latest"
 CONTAINER_NAME="tynguyen_base"
 ```
 in my_docker_env.sh 
-
-## Before buidling the image, make sure the base image is already there 
-if not, 
+Then, run this shell script
 ```
-bash build_img.sh <directory to the base image dockerfile>
+bash my_docker_env.sh
+```
+
+## Build the Image if Not Exist Yet
+```
+bash build_img.sh <directory to the image dockerfile>
 ```
 i.e 
 ```
 bash build_img.sh tynguyen_base_ubuntu1804_cuda_10.0_docker 
 ```
 
-and then build the image 
-```
-bash build_img.sh <directory to the image>
-```
-i.e 
-```
-bash build_img.sh coral_tpu_detector_docker
-```
-
 ## Create the container 
-Name of the image and container should be already set in constants_for_create_container.sh file
+Name of the image and container should be already set in my_docker_env.sh file
 ```
-bash create_container.sh
+bash create_container.sh <docker image> [-ws <List of folders that want to share with the container> ]
 ```
+For example: 
+```
+bash create_container nvidia/ubuntu:latest ~/github_ws ~/bags
+
+```
+In this example, the created container will share two folders: ~/github_ws and ~/bags with the host machine. 
 
 # Use a container
 Once a container is created, the following scripts are used to easily manage the container.
@@ -128,4 +129,6 @@ run_container.sh: start the container (different from creating the container). T
 stop_container.sh: stop the container 
 rm_container.sh : remove the container
 ```
-These scripts refer to $CONTAINER_NAME set in constants_for_create_container.sh 
+These scripts refer to $CONTAINER_NAME set in my_docker_env.sh 
+
+---

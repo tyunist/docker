@@ -83,6 +83,20 @@ RUN /install_opencv3_from_pip.sh
 
 USER $user_name
 ENV HOME /home/$user_name
+
+# (Optional) Configure vim
+RUN mkdir -p $HOME/.vim
+ADD Cfg/.vim $HOME/.vim
+RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+# (Optional) Configure tmux
+ADD Cfg/.tmux.conf $HOME/.tmux.conf
+
+
+# Copy scripts that contains useful commands i.e .bashrc, my_robot_env.sh .... 
+COPY Env/.bashrc $HOME/.bashrc
+RUN mkdir $HOME/Env 
+COPY Env $HOME/
+
 WORKDIR $HOME
 
 
